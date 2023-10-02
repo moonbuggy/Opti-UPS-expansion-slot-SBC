@@ -1,0 +1,7 @@
+(sym_lib_table
+  (lib (name orangepi-zero)(type Legacy)(uri E:/electronics/KiCad/library/orangepi-zero.lib)(options "")(descr ""))
+  (lib (name RockPi)(type Legacy)(uri E:/electronics/KiCad/library/RockPi.lib)(options "")(descr ""))
+  (lib (name max3232_module)(type Legacy)(uri ${KIPRJMOD}/lib/max3232_module.lib)(options "")(descr ""))
+  (lib (name m3-screw-terminal-90)(type Legacy)(uri ${KIPRJMOD}/lib/m3-screw-terminal-90.lib)(options "")(descr ""))
+  (lib (name mp4560_regulator_module)(type Legacy)(uri ${KIPRJMOD}/lib/mp4560_regulator_module.lib)(options "")(descr ""))
+)
