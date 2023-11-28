@@ -1,0 +1,56 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP M3-Screw-Terminal-90
+D Terminals KEYSTONE PCVB METRIC SCREW TRM HORIZ
+F https://www.digikey.co.uk/product-detail/en/keystone-electronics/7790/36-7790-ND/2171010
+$ENDCMP
+#
+$CMP TestPoint-Black
+D test point
+K test point tp
+F ~
+$ENDCMP
+#
+$CMP TestPoint-Blue
+D test point
+K test point tp
+F ~
+$ENDCMP
+#
+$CMP TestPoint-Brown
+D test point
+K test point tp
+F ~
+$ENDCMP
+#
+$CMP TestPoint-Green
+D test point
+K test point tp
+F ~
+$ENDCMP
+#
+$CMP TestPoint-Orange
+D test point
+K test point tp
+F ~
+$ENDCMP
+#
+$CMP TestPoint-Red
+D test point
+K test point tp
+F ~
+$ENDCMP
+#
+$CMP TestPoint-White
+D test point
+K test point tp
+F ~
+$ENDCMP
+#
+$CMP TestPoint-Yellow
+D test point
+K test point tp
+F ~
+$ENDCMP
+#
+#End Doc Library

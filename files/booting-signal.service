@@ -1,0 +1,15 @@
+[Unit]
+Description=boot indication
+After=local-fs.target
+Requires=local-fs.target
+Before=sysinit.target
+DefaultDependencies=false
+
+[Service]
+Type=oneshot
+ExecStart=gpioset -D open-source 2 7=1
+ExecStop=gpioset -D open-source 2 7=0
+RemainAfterExit=yes
+
+[Install]
+WantedBy=sysinit.target

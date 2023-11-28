@@ -1,0 +1,14 @@
+[Unit]
+Description='ready' status indicator LED
+After=nut-server.service nut-driver.target
+Requires=nut-server.service nut-driver.target
+PartOf=nut.target
+
+[Service]
+Type=oneshot
+ExecStart=gpioset 2 6=1
+ExecStop=gpioset 2 6=0
+RemainAfterExit=yes
+
+[Install]
+WantedBy=nut.target
