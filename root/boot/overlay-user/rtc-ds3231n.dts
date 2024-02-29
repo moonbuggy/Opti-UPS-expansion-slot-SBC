@@ -1,0 +1,27 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+  compatible = "radxa,rockpis\0rockchip,rk3308";
+
+  fragment@0 {
+    target-path = "/aliases";
+
+    __overlay__ {
+      rtc0 = "/i2c@ff050000/ds3231";
+    };
+  };
+
+
+  fragment@1 {
+    target-path = "/i2c@ff050000";
+
+    __overlay__ {
+      ds3231: rtc@68 {
+        compatible = "maxim,ds3231";
+        reg = <0x68>;
+        #clock-cells = <1>;
+      };
+    };
+  };
+};
