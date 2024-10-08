@@ -24,6 +24,7 @@ expansion slot, to add an ethernet interface for network UPS management.
 *   [Software](#software)
     +   [NUT](#nut)
         -   [Minimal configuration](#minimal-configuration)
+    +   [chrony](#chrony)
     +   [Windows 2000 in Docker](#windows-2000-in-docker)
         -   [/etc/docker/daemon.json](#-etc-docker-daemonjson)
         -   [Dockerfile](#dockerfile)
@@ -79,8 +80,8 @@ The Rock Pi S board does have a [power cycling circuit](#power-cycling) that the
 Orange Pi Zero board lacks.
 
 The UPS is connected to _UART2_ (_/dev/ttyS2_) on the Orange Pi Zero and _UART3_
-(_/dev/ttyS3_) on the Rock Pi S. There's an overlay in `files/` to enable the
-UART on the Rock Pi S.
+(_/dev/ttyS3_) on the Rock Pi S. There's an overlay in `root/boot/overlay-user/`
+to enable the UART on the Rock Pi S.
 
 ### Assembled
 <p><a href="images/assembled-RockPiS-top.jpg">
@@ -244,13 +245,9 @@ Things are a bit more complicated if running Windows 2000 (or NUT) in Docker,
 which isn't yet documented here.
 
 To disable the SBC's onboard LEDs (which won't be visible once the board is
-installed in the UPS), in Armbian:
-
-```sh
-sudo systemctl stop armbian-led-state.service
-sudo sed -E 's|(trigger=).*$|\1none|' -i /etc/armbian-leds.conf
-sudo systemctl start armbian-led-state.service
-```
+installed in the UPS) apply the
+[rock-pi-s-disable-leds.dts](root/boot/overlay-user/rock-pi-s-disable-leds.dts)
+overlay.
 
 ### I²C Header
 An I²C connection is made available through jumper pins. This can be used for
@@ -268,7 +265,9 @@ directly in. For example:
 <em>DS3231 RTC module</em></p>
 
 The _i2c1_ bus on the Rock Pi S can be enabled with the
-[rock-pi-s-i2c1.dts](files/rock-pi-s-i2c1.dts) overlay.
+[rock-pi-s-i2c1.dts](root/boot/overlay-user/rock-pi-s-i2c1.dts) overlay, and
+there's an overlay for a [DS3231N RTC](root/boot/overlay-user/rtc-ds3231n.dts)
+as well.
 
 ### Fan Connector
 The 4-wire fan connector provides the option to power and control a 12V fan from
@@ -394,15 +393,15 @@ sudo usermod -a -G tty nut
 ```
 
 The _uart3_ interface on the Rock Pi S can be enabled with the
-[rock-pi-s-uart3.dts](files/rock-pi-s-uart3.dts) overlay.
+[rock-pi-s-uart3.dts](root/boot/overlay-user/rock-pi-s-uart3.dts) overlay.
 
 #### Minimal configuration
 ##### /etc/nut/ups.conf
 ```ini
 [ps1440rm]
-        driver = optiups
-        port = /dev/ttyS3
-        desc = "Opti-UPS PS-1440RM"
+  driver = optiups
+  port = /dev/ttyS3
+  desc = "Opti-UPS PS-1440RM"
 ```
 
 ##### /etc/nut/upsd.conf
@@ -411,11 +410,17 @@ The _uart3_ interface on the Rock Pi S can be enabled with the
 LISTEN 0.0.0.0 3493
 ```
 
+#### /etc/nut/nut.conf
+```conf
+# enable remote connections
+MODE=standalone
+```
+
 ##### /etc/nut/upsd.users
 ```sh
 [upsmon]
-        password = password
-        upsmon primary
+  password = password
+  upsmon primary
 ```
 
 ##### /etc/nut/upsmon.conf
@@ -442,6 +447,22 @@ automatically start again once mains power is restored. See
 Wants=nut-driver.target network-online.target
 Requires=network.target network-online.target
 ```
+
+### chrony
+The default configuration for the RTC is for chrony to tell the system to set it
+every 11 minutes. To let chrony set the time from the RTC (as a backup if
+there's some issue with the GPS), it needs to be run with the -s argument.
+
+##### /etc/default/chrony
+```sh
+# This is a configuration file for /etc/init.d/chrony and
+# /lib/systemd/system/chrony.service; it allows you to pass various options to
+# the chrony daemon without editing the init script or service file.
+
+# Options to pass to chrony.
+DAEMON_OPTS="-F 1 -r -m -s"
+```
+
 
 ### Windows 2000 in Docker
 > [!NOTE]

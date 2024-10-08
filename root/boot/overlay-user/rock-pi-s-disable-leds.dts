@@ -1,0 +1,28 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+  compatible = "radxa,rockpis\0rockchip,rk3308";
+
+  fragment@0 {
+    target-path = "/";
+
+    __overlay__ {
+      leds {
+        compatible = "gpio-leds";
+
+        blue-led {
+          linux,default-trigger = "none";
+          default-state = "off";
+        };
+
+        green-led {
+          /* this doesn't seem to disable the green led */
+          /* lets leave it here anyway */
+          linux,default-trigger = "none";
+          default-state = "off";
+        };
+      };
+    };
+  };
+};
